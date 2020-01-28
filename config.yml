@@ -1,0 +1,38 @@
+# Site Configuration
+site:
+    # Site title and tagine
+    title: "Demo Site"
+    tagline: "A simple tagline"
+
+    # Site logo (should be stored in the `public` directory)
+    logo: "logo.jpeg"
+
+    # Date format, see https://stackoverflow.com/a/20234207/1720829
+    dateformat: "January 02, 2006"
+    
+    # The social URLs that will display under the title and tagline
+    # Choose a name, font awesome brands icon, and url for each
+    social_urls:
+      - name: "My Github"
+        fab_icon: "fa-github"
+        url: "https://github.com/nathan-fiscaletti/"
+
+    # The patlforms on which content can be shared
+    # See https://gist.github.com/nathan-fiscaletti/aec41536f802aeaf7b14af47e93ec5aa
+    share_platforms:
+      - facebook
+      - twitter
+
+    # The URL for your Font Awesome Kit
+    font_awesome_kit: ""
+
+# Author Configuration (you can override this per post with post meta data)
+#
+# This is the default Author for all posts unless specified in a markdown files meta data
+author:
+    name: "John Doe"
+    bio: "Just an average Doe"
+    avatar: "logo.jpeg"
+
+
+

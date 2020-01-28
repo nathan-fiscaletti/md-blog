@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+# dependencies
+echo "Checking Go Dependencies..."
+
+go get github.com/gomarkdown/markdown
+go get github.com/gomarkdown/markdown/parser
+go get github.com/writeas/go-strip-markdown
+go get github.com/grokify/html-strip-tags-go
+go get gopkg.in/yaml.v2
+
+# Build Site
+go run compiler/build-site.go $@
