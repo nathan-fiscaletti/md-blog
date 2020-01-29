@@ -5,7 +5,6 @@ A simple static-site-generator for bloggers that relies entirely on Markdown
 > This project is a WIP project.
 
 <div align="center">
-    <img src="./preview.png" />
     <a href="https://blog.nathanf.tk/">Demo Site</a>
 </div>
 
