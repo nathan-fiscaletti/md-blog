@@ -3,12 +3,9 @@
 A simple static-site-generator for bloggers that relies entirely on Markdown
 
 > This project is a WIP project.
-
-<div align="center">
-    <a href="https://blog.nathanf.tk/">Demo Site</a>
-</div>
-
 > [Go](https://golang.org/doc/install) is required to use this project
+
+[Demo Site](https://blog.nathanf.tk/)
 
 ## Setup
 
