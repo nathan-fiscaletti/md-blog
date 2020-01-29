@@ -3,6 +3,7 @@
 A simple static-site-generator for bloggers that relies entirely on Markdown
 
 > This project is a WIP project.
+>
 > [Go](https://golang.org/doc/install) is required to use this project
 
 [Demo Site](https://blog.nathanf.tk/)
