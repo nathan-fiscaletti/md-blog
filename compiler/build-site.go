@@ -425,11 +425,14 @@ var html_substitution_parsers = map[string]func(*Config, *Post, *Post, *Post)str
         return post.Date
     },
     "BADGES": func(config *Config, post *Post, lastPost *Post, nextPost *Post) string {
-        result := ""
+        tags := ""
         for _,tag := range post.Tags {
-            result = result + strings.Replace(config.Templates.BadgeTemplate, "{{BADGE_NAME}}", tag, -1) + " "
+            template := config.Templates.BadgeTemplate
+            template = strings.Replace(template, "{{BADGE_NAME}}", tag, -1)
+            template = strings.Replace(template, "{{BADGE_URL}}", "__tag__" + url.QueryEscape(strings.ToLower(tag)) + ".html", -1)
+            tags = tags + template + " "
         }
-        return result
+        return tags
     },
     "POST": func(config *Config, post *Post, lastPost *Post, nextPost *Post) string {
         return post.Content
