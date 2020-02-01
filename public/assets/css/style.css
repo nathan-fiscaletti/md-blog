@@ -21,6 +21,11 @@
     object-fit: cover;
 }
 
+.tag-link, .tag-link:hover, .tag-link:visited, .tag-link:active {
+    text-decoration: none;
+    color: white;
+}
+
 .social-link {
     color: black;
     display: inline-block;

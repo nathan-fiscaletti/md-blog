@@ -1,6 +1,6 @@
 # md-blog
 
-A simple static-site-generator for bloggers that relies entirely on Markdown
+A simple static-site-generator for bloggers that relies entirely on Markdown written in Go
 
 > This project is a WIP project.
 >

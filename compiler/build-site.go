@@ -44,7 +44,10 @@ type Config struct {
         PreviewTemplate string
         PreviewFullTemplate string
         SocialURLTemplate string
+        ViewBadgeTemplate string
     }
+
+    TagList []string
 
     // Temporary palceholder for posts while parsing meta data
     // See ParseMetaData function
@@ -122,6 +125,16 @@ func main() {
     Clean("./public/")
     LoadTemplates(&config, "./compiler/templates/")
     posts := ParsePosts(&config, "./posts/", "./public/");
+    
+    fmt.Printf("] Generating files for all tags\n")
+    for _,tag := range config.TagList {
+        err := ParseTagPage(&config, posts, tag, "./public/")
+        if err != nil {
+            fmt.Printf("failed to generate tag page: %v\n", err)
+            os.Exit(1)
+        }
+    }
+
     err = ParseMainPage(&config, posts, "./public/")
     if err != nil {
         fmt.Printf("failed to generate site index: %v\n", err)
@@ -163,6 +176,7 @@ func LoadTemplates(config *Config, dir string) {
     preview_full_template,_ := ioutil.ReadFile(dir + "post_preview_full.tmpl")
     main_template,_ := ioutil.ReadFile(dir + "main.tmpl")
     social_url_template,_ := ioutil.ReadFile(dir + "social_url.tmpl")
+    view_badge_template,_ := ioutil.ReadFile(dir + "view_tag.tmpl")
 
     config.Templates.PostTemplate = string(post_template)
     config.Templates.BadgeTemplate = string(badge_template)
@@ -170,6 +184,83 @@ func LoadTemplates(config *Config, dir string) {
     config.Templates.PreviewFullTemplate = string(preview_full_template)
     config.Templates.MainTemplate = string(main_template)
     config.Templates.SocialURLTemplate = string(social_url_template)
+    config.Templates.ViewBadgeTemplate = string(view_badge_template)
+}
+
+var tags_page_substitution_parsers = map[string]func(*Config, []Post, string) string {
+    "PAGE_TITLE": func(config *Config, posts []Post, tag string) string {
+        return config.Site.Title + " - " + tag
+    },
+    "FONT_AWESOME_KIT": func(config *Config, posts []Post, tag string) string {
+        return config.Site.FontAwesomeKit
+    },
+    "COPYRIGHT_YEAR": func(config *Config, posts []Post, tag string) string {
+        return fmt.Sprintf("%v", time.Now().Year())
+    },
+    "TAG": func(config *Config, posts []Post, tag string) string {
+        return tag
+    },
+    "POSTS": func(config *Config, posts []Post, tag string) string {
+        data := ""
+        for _,post := range posts {
+            postIsInTag := false
+            for _,postTag := range post.Tags {
+                if postTag == tag {
+                    postIsInTag = true
+                    break
+                }
+            }
+
+            if postIsInTag {
+                post_template := config.Templates.PreviewFullTemplate
+                post_template = strings.Replace(post_template, "{{POST_URL}}", post.UrlSafeTitle + ".html", -1)
+                post_template = strings.Replace(post_template, "{{POST_TITLE}}", post.Title, -1)
+                post_template = strings.Replace(post_template, "{{POST_DATE}}", post.Date, -1)
+                post_template = strings.Replace(post_template, "{{POST_PREVIEW_TEXT}}", post.PreviewContent, -1)
+
+                tags := ""
+                for _,tag := range post.Tags {
+                    template := config.Templates.BadgeTemplate
+                    template = strings.Replace(template, "{{BADGE_NAME}}", tag, -1)
+                    template = strings.Replace(template, "{{BADGE_URL}}", "__tag__" + url.QueryEscape(strings.ToLower(tag)) + ".html", -1)
+                    tags = tags + template + " "
+                }
+                post_template = strings.Replace(post_template, "{{POST_BADGES}}", tags, -1)
+                data = data + post_template
+            }
+        }
+
+        return data
+    },
+}
+
+func ParseTagPage(config *Config, posts []Post, tag string, outputdir string) error {
+    data := config.Templates.ViewBadgeTemplate
+
+    lines := strings.Split(data, "\n")
+    for _,line := range lines {
+        pattern := regexp.MustCompile(`({{)(?P<sub>[A-Za-z0-9_-]+)(}})`)
+        matches := pattern.FindAllStringSubmatch(line, -1)
+     
+        for _,match := range matches {
+            matchcount := len(match)
+
+            if matchcount > 0 && matchcount < 4 {
+                return errors.New(line)
+            }
+
+            if matchcount > 0 {
+                if _,exists := tags_page_substitution_parsers[match[2]]; exists {
+                    parsed := tags_page_substitution_parsers[match[2]](config, posts, tag)
+                    data = strings.Replace(data, "{{" + match[2] + "}}", parsed, -1)
+                }
+            }
+        }
+    }
+
+    fmt.Printf("]     Generating tag" + outputdir + "__tag__" + url.QueryEscape(strings.ToLower(tag)) + ".html\n")
+    ioutil.WriteFile(outputdir + "__tag__" + url.QueryEscape(strings.ToLower(tag)) + ".html", []byte(data), 0755)
+    return nil
 }
 
 var main_page_substitution_parsers = map[string]func(*Config, []Post) string {
@@ -213,7 +304,10 @@ var main_page_substitution_parsers = map[string]func(*Config, []Post) string {
 
             tags := ""
             for _,tag := range post.Tags {
-                tags = tags + strings.Replace(config.Templates.BadgeTemplate, "{{BADGE_NAME}}", tag, -1) + " "
+                template := config.Templates.BadgeTemplate
+                template = strings.Replace(template, "{{BADGE_NAME}}", tag, -1)
+                template = strings.Replace(template, "{{BADGE_URL}}", "__tag__" + url.QueryEscape(strings.ToLower(tag))+".html", -1)
+                tags = tags + template + " "
             }
             post_template = strings.Replace(post_template, "{{POST_BADGES}}", tags, -1)
             data = data + post_template
@@ -445,6 +539,19 @@ var meta_data_parsers = map[string]func(*Config, string) {
     },
     "tags": func(config *Config, value string) {
         config.Post.Tags = strings.Split(value, ",")
+        for _,tag := range config.Post.Tags {
+            exists := false
+            for _,ex_tag := range config.TagList {
+                if ex_tag == tag {
+                    exists = true
+                    break
+                }
+            }
+
+            if !exists {
+                config.TagList = append(config.TagList, tag)
+            }
+        }
     },
 }
 
