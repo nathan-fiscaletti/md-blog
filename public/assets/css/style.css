@@ -49,6 +49,10 @@
     width: 640px !important;
 }
 
+.header-split {
+    margin-top: 64px;
+}
+
 pre {
     background: #ffffff !important;
 }
