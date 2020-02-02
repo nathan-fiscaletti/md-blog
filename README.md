@@ -41,7 +41,6 @@ Example:
 |---|---|---|
 |`title`|`My Blog Post`|**YES**|
 |`tags`|`tag1,tag 2,tag 3`|NO|
-|`tags`|`tag1,tag 2,tag 3`|NO|
 |`author`|`John Doe`|NO|
 |`author_bio`|`I am John Doe`|NO|
 |`author_avatar`|`john.jpg`|NO|

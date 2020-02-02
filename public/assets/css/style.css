@@ -1,12 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:200,400,700');
+
+
 .site-title {
     margin-top: 32px;
     margin-bottom: 32px;
-    font-weight: 300!important;
     text-align: center;
+}
+
+.site-title h1 {
+    font-weight: 700 !important;
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 60px;
 }
 
 .site-tagline {
     font-weight: 100!important;
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 30px;
 }
 
 .logo-wrapper {
@@ -48,9 +58,36 @@
 }
 
 .post-preview-title {
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
     margin-top: 64px;
     margin-bottom: 0px;
+}
+
+.post-title {
+    font-size: 40px;
+    font-stretch: 100%;
+    font-weight: 700;
+    font-family: 'Fira Sans', sans-serif;
+    color: black;
+    line-height: 40px;
+    text-decoration-style: solid;
+    text-decoration-color: black;
+    text-rendering: optimizeLegibility;
+}
+
+.post-preview-title a {
+    font-size: 40px;
+    font-stretch: 100%;
+    font-weight: 700;
+    font-family: 'Fira Sans', sans-serif;
+    color: black;
+    line-height: 40px;
+    text-decoration-style: solid;
+    text-decoration-color: black;
+    text-rendering: optimizeLegibility;
+}
+
+.post-preview-title a:hover {
+    text-decoration: none;
 }
 
 .post-preview-badges {
@@ -60,6 +97,7 @@
 .post-preview-date {
     margin-bottom: 8px;
     font-size: 14px;
+    color: #8795A1;
 }
 
 .post-nav-wrapper {
@@ -78,6 +116,7 @@
 
 .post-preview-text {
     position: relative;
+    font-family: 'Fira Sans', sans-serif;
 }
 
 .post-preview-text:after {
@@ -113,6 +152,18 @@
     margin-bottom: 64px;
 }
 
+.more-posts-wrapper h2 {
+    font-size: 40px;
+    font-stretch: 100%;
+    font-weight: 700;
+    font-family: 'Fira Sans', sans-serif;
+    color: black;
+    line-height: 40px;
+    text-decoration-style: solid;
+    text-decoration-color: black;
+    text-rendering: optimizeLegibility;
+}
+
 .author-name {
     margin-bottom: 0px;
     margin-top: 8px;
@@ -125,6 +176,10 @@
 
 .copyright {
     font-size: 14px;
+}
+
+.post-text {
+    font-family: 'Fira Sans', sans-serif;
 }
 
 .post-text h1 {
